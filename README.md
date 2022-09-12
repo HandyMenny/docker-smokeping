@@ -1,4 +1,4 @@
-# mad-ady/smokeping - based on magicdud4eva/smokeping
+# handymenny/docker-smokeping - based on mad-ady/docker-smokeping
 
 Smokeping keeps track of your network latency. For a full example of what this application is capable of visit [UCDavis](http://smokeping.ucdavis.edu/cgi-bin/smokeping.fcgi). The Smokeping Docker image includes the latest version of Smokeping. It's suitable to run as master/slave. Default configuration needs tweaking, but should allow you to run out of the box.
 
