@@ -56,16 +56,16 @@ ENV \
 #Adding Custom files
 ADD init/ /etc/my_init.d/
 ADD services/ /etc/service/
-ADD Alerts /tmp/Alerts
-ADD Database /tmp/Database
-ADD General /tmp/General
-ADD Presentation /tmp/Presentation
-ADD Probes /tmp/Probes
-ADD Slaves /tmp/Slaves
-ADD Targets /tmp/Targets
-ADD pathnames /tmp/pathnames
-ADD ssmtp.conf /tmp/ssmtp.conf
-ADD config /tmp/config
+ADD config/smokeping/Alerts /tmp/Alerts
+ADD config/smokeping/Database /tmp/Database
+ADD config/smokeping/General /tmp/General
+ADD config/smokeping/Presentation /tmp/Presentation
+ADD config/smokeping/Probes /tmp/Probes
+ADD config/smokeping/Slaves /tmp/Slaves
+ADD config/smokeping/Targets /tmp/Targets
+ADD config/smokeping/pathnames /tmp/pathnames
+ADD config/ssmtp/ssmtp.conf /tmp/ssmtp.conf
+ADD config/smokeping/config /tmp/config
 
 # Copy Smokeping that we previously built
 COPY --from=build /opt/smokeping-* /opt/smokeping
@@ -109,7 +109,7 @@ RUN \
 &&  apt-get clean \
 &&  rm -rf /var/lib/apt/lists/* /var/tmp/*
 
-ADD smokeping.conf /etc/apache2/sites-enabled/10-smokeping.conf
+ADD config/apache/smokeping.conf /etc/apache2/sites-enabled/10-smokeping.conf
 RUN  mkdir /var/www/html/smokeping \
 &&  ln -s /opt/smokeping/cache /var/www/html/smokeping/cache \
 &&  chown smokeping:www-data /opt/smokeping/cache \
