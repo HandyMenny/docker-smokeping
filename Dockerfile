@@ -85,7 +85,7 @@ COPY --from=build /SmokePing/VERSION /opt/smokeping
 # Install dependencies
 RUN \
     apt-get update \
-&&  apt-get install -y apache2 libapache2-mod-fcgid rrdtool fping ssmtp syslog-ng ttf-dejavu iw time dnsutils iproute2 busybox tzdata \
+&&  apt-get install -y apache2 libapache2-mod-fcgid rrdtool fping ssmtp syslog-ng ttf-dejavu iw time dnsutils iproute2 busybox tzdata tcptraceroute echoping \
 &&  chmod -v +x /etc/service/*/run \
 &&  chmod -v +x /etc/my_init.d/*.sh \
 &&  mkdir /var/run/smokeping \
