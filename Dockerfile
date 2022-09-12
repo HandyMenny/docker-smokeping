@@ -11,11 +11,13 @@ ENV \
     LC_ALL=C \
     LANG=C
 
+ARG SMOKEPING_VERSION="2.8.2"
+
 # Install base packages and do the build
 RUN \
     apt-get update \
 &&  apt-get install -y build-essential autoconf git cpanminus unzip rrdtool librrds-perl libnet-ssleay-perl \
-&&  git clone https://github.com/oetiker/SmokePing.git \
+&&  git clone https://github.com/oetiker/SmokePing.git --single-branch --branch ${SMOKEPING_VERSION}  \
 &&  cd SmokePing \
 &&  ./bootstrap \
 &&  ./configure \
