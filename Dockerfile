@@ -118,22 +118,6 @@ RUN  mkdir /var/www/html/smokeping \
 &&  chown -R smokeping:www-data /opt/smokeping/data
 COPY --from=build /SmokePing/htdocs/ /var/www/html/smokeping/
 
-# Add custom probes and dependencies
-
-RUN \
-    curl -L -o /opt/smokeping/lib/Smokeping/probes/speedtest.pm \
-        https://github.com/mad-ady/smokeping-speedtest/raw/master/speedtest.pm \
-&&  curl -L -o /opt/smokeping/lib/Smokeping/probes/YoutubeDL.pm \
-        https://github.com/mad-ady/smokeping-youtube-dl/raw/master/YoutubeDL.pm \
-&&  curl -L -o /opt/smokeping/lib/Smokeping/probes/WifiParam.pm \
-        https://github.com/mad-ady/smokeping-wifi-param/raw/master/WifiParam.pm \
-&&  curl -L -o /usr/local/bin/speedtest-cli \
-        https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py \
-&&  chmod a+x /usr/local/bin/speedtest-cli \
-&&  curl -L -o /usr/local/bin/youtube-dl https://yt-dl.org/downloads/latest/youtube-dl \
-&&  chmod a+x /usr/local/bin/youtube-dl
-
-
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
