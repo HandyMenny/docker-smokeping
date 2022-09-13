@@ -5,11 +5,12 @@ Smokeping keeps track of your network latency. For a full example of what this a
 ![Smokeping Docker](https://github.com/magicdude4eva/docker-smokeping/raw/master/docker-smokeping.png)
 
 ## TL;DR - Features
+* Last version with influx support
 * Working configuration for DNS and web-site probes
 * Ability to run as a slave
+* echoping, tcptraceroute, dnsutils, fping, ssmtp included
 
-[![smokeping](http://oss.oetiker.ch/smokeping/inc/smokeping-logo.png)][smokeurl]
-[smokeurl]: http://oss.oetiker.ch/smokeping/
+[![smokeping](https://oss.oetiker.ch/smokeping/inc/smokeping-logo.png)](https://oss.oetiker.ch/smokeping/)
 
 ## Usage
 
