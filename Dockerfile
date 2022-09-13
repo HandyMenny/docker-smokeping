@@ -1,8 +1,8 @@
-FROM phusion/baseimage:master as build
+FROM phusion/baseimage:master as base
 MAINTAINER mad_ady, https://github.com/mad-ady/docker-smokeping
 
 # ========================================================================================
-# ====== SmokePing
+# ====== Custom base image
 ENV \
     DEBIAN_FRONTEND="noninteractive" \
     HOME="/root" \
@@ -11,12 +11,26 @@ ENV \
     LC_ALL=C \
     LANG=C
 
+# Install base packages and do the build
+RUN \
+    apt-get update \
+&&  apt-get install -y --no-install-recommends apache2 libapache2-mod-fcgid rrdtool fping ssmtp syslog-ng time dnsutils iproute2 tzdata tcptraceroute echoping \
+&&  apt-get autoremove -y \
+&&  apt-get clean \
+&&  rm -rf /var/lib/apt/lists/* /var/tmp/*
+
+
+FROM base as build
+MAINTAINER mad_ady, https://github.com/mad-ady/docker-smokeping
+
+# ========================================================================================
+# ====== SmokePing Build
 ARG SMOKEPING_VERSION="2.8.2"
 
 # Install base packages and do the build
 RUN \
     apt-get update \
-&&  apt-get install -y build-essential autoconf git cpanminus unzip rrdtool librrds-perl libnet-ssleay-perl \
+&&  apt-get install -y --no-install-recommends build-essential libtool automake git cpanminus unzip librrds-perl libnet-ssleay-perl \
 &&  git clone https://github.com/oetiker/SmokePing.git --single-branch --branch ${SMOKEPING_VERSION}  \
 &&  cd SmokePing \
 &&  ./bootstrap \
@@ -29,7 +43,7 @@ RUN \
 ###########################################################################################
 
 #create the production image
-FROM phusion/baseimage:master
+FROM base
 MAINTAINER mad_ady, https://github.com/mad-ady/docker-smokeping
 
 RUN \
@@ -38,16 +52,10 @@ RUN \
 
 # Apache environment settings
 ENV \
-    DEBIAN_FRONTEND="noninteractive" \
-    HOME="/root" \
-    TERM="xterm" \
     APACHE_LOG_DIR="/var/log/apache2" \
     APACHE_LOCK_DIR="/var/lock/apache2" \
     APACHE_PID_FILE="/var/run/apache2.pid" \
-    PERL_MM_USE_DEFAULT=1 \
-    PERL5LIB=/opt/smokeping/lib \
-    LC_ALL=C \
-    LANG=C
+    PERL5LIB=/opt/smokeping/lib
 
 #Adding Custom files
 ADD init/ /etc/my_init.d/
@@ -78,9 +86,7 @@ COPY --from=build /SmokePing/VERSION /opt/smokeping
 
 # Install dependencies
 RUN \
-    apt-get update \
-&&  apt-get install -y apache2 libapache2-mod-fcgid rrdtool fping ssmtp syslog-ng ttf-dejavu iw time dnsutils iproute2 busybox tzdata tcptraceroute echoping \
-&&  chmod -v +x /etc/service/*/run \
+    chmod -v +x /etc/service/*/run \
 &&  chmod -v +x /etc/my_init.d/*.sh \
 &&  mkdir /var/run/smokeping \
 &&  mkdir /var/cache/smokeping \
@@ -100,10 +106,7 @@ RUN \
 &&  sed -i 's/#AddHandler cgi-script .cgi/AddHandler cgi-script .cgi .pl .fcgi/' /etc/apache2/mods-available/mime.conf \
 # Adjusting SyslogNG - see https://github.com/phusion/baseimage-docker/pull/223/commits/dda46884ed2b1b0f7667b9cc61a961e24e910784
 &&  sed -ie "s/^       system();$/#      system(); #This is to avoid calls to \/proc\/kmsg inside docker/g" /etc/syslog-ng/syslog-ng.conf \
-&&  rm /etc/ssmtp/ssmtp.conf \
-&&  apt-get autoremove -y \
-&&  apt-get clean \
-&&  rm -rf /var/lib/apt/lists/* /var/tmp/*
+&&  rm /etc/ssmtp/ssmtp.conf
 
 ADD config/apache/smokeping.conf /etc/apache2/sites-enabled/10-smokeping.conf
 RUN  mkdir /var/www/html/smokeping \
