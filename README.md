@@ -8,7 +8,7 @@ Smokeping keeps track of your network latency. For a full example of what this a
 * Last version with influx support
 * Working configuration for DNS and web-site probes
 * Ability to run as a slave
-* echoping, tcptraceroute, dnsutils, fping, ssmtp included
+* tcpping, dnsutils, fping, ssmtp included
 
 [![smokeping](https://oss.oetiker.ch/smokeping/inc/smokeping-logo.png)](https://oss.oetiker.ch/smokeping/)
 
@@ -29,7 +29,7 @@ docker run \
     -v <path/to/smokeping/smokeping_secrets>:/etc/smokeping/smokeping_secrets \
     -v <path/to/smokeping/data>:/data \
     -v <path/to/smokeping/config>:/config \
-    madady/smokeping-influx:latest
+    handymenny/smokeping:latest
 ```
 
 Run as a slave (connected to docker0):
@@ -42,7 +42,7 @@ docker run \
     -e SMOKEPING_EXTRA_FLAGS="--debug-daemon" \
     -e SMOKEPING_MASTER_URL=<http://master.server.url:9500/smokeping/smokeping.cgi> \
     -e SMOKEPING_SHARED_SECRET=<your_secret_goes_here_in_clear_text_unfortunately> \
-    madady/smokeping-influx:latest
+    handymenny/smokeping:latest
 ```
 In order to run as a slave you'll need to edit the master configuration, speciffically:
 * Add the following to /config/Slaves:
