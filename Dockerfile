@@ -25,7 +25,7 @@ MAINTAINER mad_ady, https://github.com/mad-ady/docker-smokeping
 
 # ========================================================================================
 # ====== SmokePing Build
-ARG SMOKEPING_VERSION="2.8.2"
+ENV SMOKEPING_VERSION="2.8.2"
 
 # Install base packages and do the build
 RUN \
@@ -37,6 +37,9 @@ RUN \
 &&  ./configure \
 &&  make install \
 &&  mv htdocs/smokeping.fcgi.dist htdocs/smokeping.fcgi
+
+# UPDATE VERSION NUMBER 
+RUN perl -i -p -e '"'${SMOKEPING_VERSION}'" =~ /(\d+)\.(\d+)\.(\d+)/ and $v = sprintf("%d.%03d%03d",$1,$2,$3) and s/^\$VERSION\s*=\s*".*?"/\$VERSION = "$v"/' /opt/smokeping-${SMOKEPING_VERSION}/lib/Smokeping.pm
 
 ###########################################################################################
 # Target image                                                                            #
