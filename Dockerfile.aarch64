@@ -14,7 +14,7 @@ ENV \
 # Install base packages and do the build
 RUN \
     apt-get update \
-&&  apt-get install -y --no-install-recommends apache2 libapache2-mod-fcgid rrdtool fping ssmtp syslog-ng time dnsutils iproute2 tzdata traceroute echoping \
+&&  apt-get install -y --no-install-recommends apache2 libapache2-mod-fcgid rrdtool fping ssmtp syslog-ng time dnsutils tzdata traceroute \
 &&  curl --output /usr/bin/tcpping https://raw.githubusercontent.com/deajan/tcpping/master/tcpping \
 &&  chmod 755 /usr/bin/tcpping \
 &&  apt-get autoremove -y \
