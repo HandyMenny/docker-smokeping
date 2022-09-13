@@ -32,15 +32,9 @@ RUN \
 FROM phusion/baseimage:master
 MAINTAINER mad_ady, https://github.com/mad-ady/docker-smokeping
 
-# Some build ENV variables
-# LIBDIR looks like /usr/lib/x86_64-linux-gnu
-# PERLDIR looks like /usr/lib/x86_64-linux-gnu/perl5/
-#ENV \
-#   LIBDIR=$(ldconfig -v 2>/dev/null | grep /usr/lib | head --lines=2 | tail -1 | sed 's/:$//') \
-#   PERLDIR=$(perl -V | grep $LIBDIR/perl5/ | tail -1 | sed 's/ *//') \ 
-ENV \
-    LIBDIR=/usr/lib/x86_64-linux-gnu \
-    PERLDIR=/usr/lib/x86_64-linux-gnu/perl5/
+RUN \
+   LIBDIR=$(ldconfig -v 2>/dev/null | grep /usr/lib | head --lines=2 | tail -1 | sed 's/:$//') && \
+   PERLDIR=$(perl -V | grep $LIBDIR/perl5/ | tail -1 | sed 's/ *//')
 
 # Apache environment settings
 ENV \
